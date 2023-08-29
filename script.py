@@ -3,6 +3,10 @@
 # Levy Nascimento Junior RM 98655
 # Lívia Namba Seraphim RM 97819
 
+
+# Controle de estoque, entrada e saída
+
+# Definição dos itens em estoque 
 class Estoque:
     def __init__(self):
         self.itens = {
@@ -11,6 +15,8 @@ class Estoque:
             'rotulos': 6000,
             'caixas': 2000,
         }
+
+# Entrada para que o cliente insira a quantidade a ser inserida no estoque
     
     def entrada(self, item, quantidade):
         if item in self.itens:
@@ -18,7 +24,9 @@ class Estoque:
             print(f"Entrada de {quantidade} {item} registrada com sucesso!")
         else:
             print(f"O item {item} não existe no estoque.")
-    
+
+# Saída e definição de venda apenas em unidade, meia e uma duzia
+
     def saida(self, item, quantidade):
         if item in self.itens:
             if item == 'garrafas' and quantidade not in [1, 6, 12]:
