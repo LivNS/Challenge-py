@@ -39,9 +39,10 @@ class Estoque:
 
 # Para adicionar o frete e o preço do produto
 class Pedido:
-    def __init__(self, cliente, itens):
+    def __init__(self, cliente, itens, data_entrega):
         self.cliente = cliente
         self.itens = itens
+        self.data_entrega = data_entrega
 
 estoque = Estoque()
 
@@ -73,9 +74,13 @@ while True:
             quantidade = int(input("Digite a quantidade do item: "))
             itens_pedido[item] = quantidade
             estoque.saida(item, quantidade)  
-        pedido = Pedido(cliente, itens_pedido)
+        data_entrega_str = input("Digite a data de entrega (formato: DD/MM/YYYY): ")
+        data_entrega = datetime.strptime(data_entrega_str, "%d/%m/%Y")
+        
+        pedido = Pedido(cliente, itens_pedido, data_entrega)
         preco_total = pedido.calcular_preco_total()
         print(f"Preço total do pedido para {cliente}: R$ {preco_total:.2f}")
+        print(f"Data de entrega: {data_entrega.strftime('%d/%m/%Y')}")
     elif escolha == '5':
         print("Saindo do programa.")
         break
