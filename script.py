@@ -6,6 +6,10 @@
 
 # Controle de estoque, entrada e saída
 
+# importação datetime e timedelta
+
+from datetime import datetime, timedelta
+
 # Definição dos itens em estoque 
 class Estoque:
     def __init__(self):
@@ -37,13 +41,32 @@ class Estoque:
         else:
             print(f"O item {item} não existe no estoque.")
 
-# Para adicionar o frete e o preço do produto
+# Estoque
+    def mostrar_estoque(self):
+        print("\nEstoque:")
+        for item, quantidade in self.itens.items():
+            print(f"{item}: {quantidade}")
+
+# Para adicionar o frete, a data de entrega e o preço do produto
 class Pedido:
     def __init__(self, cliente, itens, data_entrega):
         self.cliente = cliente
         self.itens = itens
         self.data_entrega = data_entrega
 
+    def calcular_preco_total(self):
+        preco_total = 0
+        for item, quantidade in self.itens.items():
+            preco_total += self.calcular_preco_item(item, quantidade)
+        preco_total += 10 
+        preco_total += preco_total * 0.1
+        preco_total += 10 
+        return preco_total
+    
+    def calcular_preco_item(self, item, quantidade):
+        if item == 'garrafas':
+            return quantidade * 10  
+        
 estoque = Estoque()
 
 while True:
@@ -59,12 +82,15 @@ while True:
         item = input("Digite o item de entrada: ")
         quantidade = int(input("Digite a quantidade de entrada: "))
         estoque.entrada(item, quantidade)
+
     elif escolha == '2':
         item = input("Digite o item de saída: ")
         quantidade = int(input("Digite a quantidade de saída: "))
         estoque.saida(item, quantidade)
+
     elif escolha == '3':
-        estoque.mostrar_estoque()
+        estoque.mostrar_estoque() 
+    
     elif escolha == '4':
         cliente = input("Digite o nome do cliente: ")
         num_itens = int(input("Digite o número de itens no pedido: "))
@@ -73,14 +99,20 @@ while True:
             item = input("Digite o item do pedido: ")
             quantidade = int(input("Digite a quantidade do item: "))
             itens_pedido[item] = quantidade
-            estoque.saida(item, quantidade)  
+
         data_entrega_str = input("Digite a data de entrega (formato: DD/MM/YYYY): ")
         data_entrega = datetime.strptime(data_entrega_str, "%d/%m/%Y")
-        
+
         pedido = Pedido(cliente, itens_pedido, data_entrega)
+
+        for item, quantidade in itens_pedido.items():
+            estoque.saida(item, quantidade)
+
         preco_total = pedido.calcular_preco_total()
+
         print(f"Preço total do pedido para {cliente}: R$ {preco_total:.2f}")
         print(f"Data de entrega: {data_entrega.strftime('%d/%m/%Y')}")
+
     elif escolha == '5':
         print("Saindo do programa.")
         break
