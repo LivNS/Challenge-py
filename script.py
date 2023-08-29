@@ -15,18 +15,16 @@ class Estoque:
             'rotulos': 6000,
             'caixas': 2000,
         }
-
-# Entrada para que o cliente insira a quantidade a ser inserida no estoque
     
+# Entrada para que o cliente insira a quantidade a ser inserida no estoque
     def entrada(self, item, quantidade):
         if item in self.itens:
             self.itens[item] += quantidade
             print(f"Entrada de {quantidade} {item} registrada com sucesso!")
         else:
             print(f"O item {item} não existe no estoque.")
-
+    
 # Saída e definição de venda apenas em unidade, meia e uma duzia
-
     def saida(self, item, quantidade):
         if item in self.itens:
             if item == 'garrafas' and quantidade not in [1, 6, 12]:
@@ -38,11 +36,12 @@ class Estoque:
                 print(f"Quantidade insuficiente de {item} em estoque.")
         else:
             print(f"O item {item} não existe no estoque.")
-    
-    def mostrar_estoque(self):
-        print("Estoque atual:")
-        for item, quantidade in self.itens.items():
-            print(f"{item}: {quantidade}")
+
+# Para adicionar o frete e o preço do produto
+class Pedido:
+    def __init__(self, cliente, itens):
+        self.cliente = cliente
+        self.itens = itens
 
 estoque = Estoque()
 
@@ -50,7 +49,8 @@ while True:
     print("\n1 - Registrar entrada")
     print("2 - Registrar saída")
     print("3 - Mostrar estoque")
-    print("4 - Sair")
+    print("4 - Realizar pedido")
+    print("5 - Sair")
     
     escolha = input("Escolha uma opção: ")
     
@@ -65,6 +65,18 @@ while True:
     elif escolha == '3':
         estoque.mostrar_estoque()
     elif escolha == '4':
+        cliente = input("Digite o nome do cliente: ")
+        num_itens = int(input("Digite o número de itens no pedido: "))
+        itens_pedido = {}
+        for _ in range(num_itens):
+            item = input("Digite o item do pedido: ")
+            quantidade = int(input("Digite a quantidade do item: "))
+            itens_pedido[item] = quantidade
+            estoque.saida(item, quantidade)  
+        pedido = Pedido(cliente, itens_pedido)
+        preco_total = pedido.calcular_preco_total()
+        print(f"Preço total do pedido para {cliente}: R$ {preco_total:.2f}")
+    elif escolha == '5':
         print("Saindo do programa.")
         break
     else:
